@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "magic-particles",
+  "version": "${version}",
+
+  "name": "Magic Particles",
+  "description": "Completely customizable cosmetic player particles",
+  "authors": [
+    "Drex"
+  ],
+  "license": "MIT",
+  "icon": "assets/magic_particles/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "server": [
+      "me.drex.magic_particles.MagicParticlesMod"
+    ]
+  },
+  "mixins": [
+    "magic_particles.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.14.21",
+    "minecraft": ">=1.20",
+    "java": ">=17"
+  }
+}
