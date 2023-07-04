@@ -69,6 +69,7 @@ public class ParticleManager {
                     particleMap.put(entry.getKey(), entry.getValue());
                 } catch (IOException e) {
                     e.printStackTrace();
+                    return false;
                 }
             }
         } else {
@@ -88,7 +89,7 @@ public class ParticleManager {
                         builder.put(id, magicParticle);
                     } catch (IOException | JsonSyntaxException e) {
                         e.printStackTrace();
-                        //return false;
+                        return false;
                     }
                 }
             }

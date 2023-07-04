@@ -88,9 +88,13 @@ public class MagicParticlesCommand {
 
     private static int reload(CommandContext<CommandSourceStack> ctx) {
         if (ParticleManager.INSTANCE.load()) {
-            // TODO: feedback
+            Map<String, MagicParticle> particles = ParticleManager.INSTANCE.particleMap();
+            MutableComponent component = Component.translatable("text.magic_particles.reload").withStyle(ChatFormatting.GOLD);
+            ctx.getSource().sendSuccess(() -> component, false);
+            return particles.size();
         } else {
-            // TODO: feedback
+            MutableComponent component = Component.translatable("text.magic_particles.error");
+            ctx.getSource().sendFailure(component);
         }
         return 1;
     }
@@ -98,20 +102,20 @@ public class MagicParticlesCommand {
     private static int setParticle(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
         String particle = StringArgumentType.getString(ctx, "particle");
         if (!ParticleManager.INSTANCE.particleMap().containsKey(particle)) {
-            // TODO: send feedback
-            //ctx.getSource().sendFailure(Component.translatable(translationKey("unknown")));
+            ctx.getSource().sendFailure(Component.translatable("text.magic_particles.unknown"));
             return 0;
         } else {
             PlayerDataApi.setGlobalDataFor(ctx.getSource().getPlayerOrException(), PARTICLE, StringTag.valueOf(particle));
-            // TODO: send feedback
-            //ctx.getSource().sendSuccess(Component.translatable(translationKey("set"), ConfigManager.INSTANCE.config().magicParticle.particles.get(particle).name), false);
+            MutableComponent component = Component.translatable("text.magic_particles.set", Component.literal(ParticleManager.INSTANCE.particleMap().get(particle).name).withStyle(ChatFormatting.YELLOW)).withStyle(ChatFormatting.GOLD);
+            ctx.getSource().sendSuccess(() -> component, false);
             return 1;
         }
     }
 
     private static int disable(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
         PlayerDataApi.setGlobalDataFor(ctx.getSource().getPlayerOrException(), PARTICLE, null);
-        // TODO: send feedback
+        MutableComponent component = Component.translatable("text.magic_particles.unset").withStyle(ChatFormatting.GOLD);
+        ctx.getSource().sendSuccess(() -> component, false);
         return 1;
     }
 }
