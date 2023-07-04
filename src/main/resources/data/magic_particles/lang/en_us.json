@@ -2,5 +2,10 @@
   "text.magic_particles.title": "Particle Animations [%s]: \n",
   "text.magic_particles.disable": "Disable",
   "text.magic_particles.disable.hover": "Click to disable!",
-  "text.magic_particles.particle.hover": "Click to apply!"
+  "text.magic_particles.particle.hover": "Click to apply!",
+  "text.magic_particles.unset": "Magic Particle has been disabled.",
+  "text.magic_particles.reload": "Reloaded Magic Particles!",
+  "text.magic_particles.error": "Something went wrong, please check logs.",
+  "text.magic_particles.unknown": "Unknown Magic Particle!",
+  "text.magic_particles.set": "Magic Particle %s has been selected."
 }
