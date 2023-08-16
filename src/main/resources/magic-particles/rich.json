@@ -1,0 +1,65 @@
+{
+  "name": "Rich",
+  "particles": [
+    {
+      "type": "simple",
+      "speed": 24.0,
+      "particle_type": {
+        "type": "minecraft:block",
+        "value": {
+          "Name": "minecraft:emerald_block"
+        }
+      },
+      "pos": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "delta": [
+        0.25,
+        0.1,
+        0.25
+      ]
+    },
+    {
+      "type": "simple",
+      "speed": 24.0,
+      "particle_type": {
+        "type": "minecraft:block",
+        "value": {
+          "Name": "minecraft:diamond_block"
+        }
+      },
+      "pos": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "delta": [
+        0.25,
+        0.1,
+        0.25
+      ]
+    },
+    {
+      "type": "simple",
+      "speed": 24.0,
+      "particle_type": {
+        "type": "minecraft:block",
+        "value": {
+          "Name": "minecraft:gold_block"
+        }
+      },
+      "pos": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "delta": [
+        0.25,
+        0.1,
+        0.25
+      ]
+    }
+  ]
+}

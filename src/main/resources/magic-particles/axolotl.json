@@ -1,0 +1,19 @@
+{
+  "name": "Axolotl",
+  "particles": [
+    {
+      "type": "image",
+      "image": "axolotl.png",
+      "size_x": 1.4,
+      "size_y": 0.8,
+      "pixel_size": 0.6,
+      "origin": [
+        0,
+        0.8,
+        0
+      ],
+      "anchor": "eyes",
+      "billboard": "vertical"
+    }
+  ]
+}

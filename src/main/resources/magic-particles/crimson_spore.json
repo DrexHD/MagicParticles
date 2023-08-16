@@ -1,0 +1,22 @@
+{
+  "name": "Crimson Spore",
+  "particles": [
+    {
+      "count": 2,
+      "pos": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "delta": [
+        0.3,
+        0.2,
+        0.3
+      ],
+      "type": "simple",
+      "particle_type": {
+        "type": "minecraft:crimson_spore"
+      }
+    }
+  ]
+}

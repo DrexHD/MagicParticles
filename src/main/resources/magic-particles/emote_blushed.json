@@ -1,0 +1,51 @@
+{
+  "name": "Emote (Blushed)",
+  "particles": [
+    {
+      "type": "simple",
+      "particle_type": {
+        "type": "minecraft:dust",
+        "color": [
+          1.0,
+          0.04,
+          0.35
+        ],
+        "scale": 0.5
+      },
+      "pos": [
+        0.18,
+        0,
+        -0.3
+      ],
+      "origin": [
+        0,
+        1.55,
+        0
+      ],
+      "billboard": "center"
+    },
+    {
+      "type": "simple",
+      "particle_type": {
+        "type": "minecraft:dust",
+        "color": [
+          1.0,
+          0.04,
+          0.35
+        ],
+        "scale": 0.5
+      },
+      "pos": [
+        -0.18,
+        0,
+        -0.3
+      ],
+      "origin": [
+        0,
+        1.55,
+        0
+      ],
+      "billboard": "center"
+    }
+  ]
+}

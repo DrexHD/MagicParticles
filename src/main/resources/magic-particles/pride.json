@@ -1,0 +1,18 @@
+{
+  "name": "Pride Flag",
+  "particles": [
+    {
+      "type": "image",
+      "image": "pride.png",
+      "size_x": 1,
+      "size_y": 0.6,
+      "pixel_size": 0.6,
+      "pos": [
+        0,
+        2.7,
+        0
+      ],
+      "billboard": "vertical"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "name": "Dragon Breath",
+  "particles": [
+    {
+      "pos": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "delta": [
+        0.2,
+        0.0,
+        0.2
+      ],
+      "type": "simple",
+      "particle_type": {
+        "type": "minecraft:dragon_breath"
+      }
+    }
+  ]
+}

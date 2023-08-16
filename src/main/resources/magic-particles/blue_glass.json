@@ -1,0 +1,81 @@
+{
+  "name": "Blue Glass",
+  "particles": [
+    {
+      "pos": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "delta": [
+        0.25,
+        0.1,
+        0.25
+      ],
+      "type": "simple",
+      "particle_type": {
+        "type": "minecraft:block",
+        "value": {
+          "Name": "blue_stained_glass"
+        }
+      }
+    },
+    {
+      "pos": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "delta": [
+        0.25,
+        0.1,
+        0.25
+      ],
+      "type": "simple",
+      "particle_type": {
+        "type": "minecraft:block",
+        "value": {
+          "Name": "white_stained_glass"
+        }
+      }
+    },
+    {
+      "pos": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "delta": [
+        0.25,
+        0.1,
+        0.25
+      ],
+      "type": "simple",
+      "particle_type": {
+        "type": "minecraft:block",
+        "value": {
+          "Name": "light_blue_stained_glass"
+        }
+      }
+    },
+    {
+      "pos": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "delta": [
+        0.25,
+        0.1,
+        0.25
+      ],
+      "type": "simple",
+      "particle_type": {
+        "type": "minecraft:block",
+        "value": {
+          "Name": "cyan_stained_glass"
+        }
+      }
+    }
+  ]
+}

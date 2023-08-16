@@ -1,0 +1,21 @@
+{
+  "name": "Soul",
+  "particles": [
+    {
+      "pos": [
+        0.0,
+        0.1,
+        0.0
+      ],
+      "delta": [
+        0.4,
+        1.12,
+        0.4
+      ],
+      "type": "simple",
+      "particle_type": {
+        "type": "minecraft:soul"
+      }
+    }
+  ]
+}

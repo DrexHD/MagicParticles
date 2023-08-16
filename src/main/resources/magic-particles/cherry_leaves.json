@@ -1,0 +1,22 @@
+{
+  "name": "Cherry Leaves",
+  "particles": [
+    {
+      "count": 2,
+      "pos": [
+        0.0,
+        0.2,
+        0.0
+      ],
+      "delta": [
+        0.6,
+        0.6,
+        0.6
+      ],
+      "type": "simple",
+      "particle_type": {
+        "type": "minecraft:cherry_leaves"
+      }
+    }
+  ]
+}

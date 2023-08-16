@@ -1,0 +1,21 @@
+{
+  "name": "Happy Villager",
+  "particles": [
+    {
+      "pos": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "delta": [
+        0.3,
+        0.4,
+        0.3
+      ],
+      "type": "simple",
+      "particle_type": {
+        "type": "minecraft:happy_villager"
+      }
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "name": "Squid Ink",
+  "particles": [
+    {
+      "pos": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "delta": [
+        0.02,
+        0.0,
+        0.02
+      ],
+      "type": "simple",
+      "particle_type": {
+        "type": "minecraft:squid_ink"
+      }
+    }
+  ]
+}

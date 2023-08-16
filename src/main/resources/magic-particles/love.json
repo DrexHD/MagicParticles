@@ -1,0 +1,21 @@
+{
+  "name": "Love",
+  "particles": [
+    {
+      "type": "simple",
+      "particle_type": {
+        "type": "minecraft:heart"
+      },
+      "pos": [
+        0,
+        1,
+        0
+      ],
+      "delta": [
+        0.5,
+        1,
+        0.5
+      ]
+    }
+  ]
+}

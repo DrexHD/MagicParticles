@@ -1,0 +1,19 @@
+{
+  "name": "Creeper",
+  "particles": [
+    {
+      "type": "image",
+      "image": "creeper.png",
+      "size_x": 0.8,
+      "size_y": 0.8,
+      "pixel_size": 0.6,
+      "origin": [
+        0,
+        0.8,
+        0
+      ],
+      "anchor": "eyes",
+      "billboard": "vertical"
+    }
+  ]
+}

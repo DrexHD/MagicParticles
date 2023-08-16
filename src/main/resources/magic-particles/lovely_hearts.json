@@ -1,0 +1,22 @@
+{
+  "name": "Lovely Hearts",
+  "particles": [
+    {
+      "count": 0,
+      "pos": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "delta": [
+        0.225,
+        0.32,
+        0.225
+      ],
+      "type": "simple",
+      "particle_type": {
+        "type": "minecraft:heart"
+      }
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "name": "Rainy Cloud",
+  "particles": [
+    {
+      "type": "simple",
+      "particle_type": {
+        "type": "minecraft:rain"
+      },
+      "count": 8,
+      "pos": [
+        0.0,
+        3.2,
+        0.0
+      ],
+      "delta": [
+        0.5,
+        0.0,
+        0.5
+      ]
+    },
+    {
+      "type": "simple",
+      "particle_type": {
+        "type": "minecraft:cloud"
+      },
+      "count": 10,
+      "pos": [
+        0.0,
+        3.6,
+        0.0
+      ],
+      "delta": [
+        0.75,
+        0.15,
+        0.75
+      ]
+    }
+  ]
+}
