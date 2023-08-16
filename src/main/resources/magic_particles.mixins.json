@@ -4,8 +4,6 @@
   "package": "me.drex.magic_particles.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "WorldCoordinateAccessor",
-    "WorldCoordinatesAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

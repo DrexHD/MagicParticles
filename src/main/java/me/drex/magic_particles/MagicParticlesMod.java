@@ -17,7 +17,7 @@ public class MagicParticlesMod implements DedicatedServerModInitializer {
 	@Override
 	public void onInitializeServer() {
 		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> MagicParticlesCommand.register(dispatcher));
-		ParticleManager.INSTANCE.init();
+		ParticleManager.init();
 	}
 
 }

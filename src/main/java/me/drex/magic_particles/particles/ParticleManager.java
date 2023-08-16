@@ -1,112 +1,129 @@
 package me.drex.magic_particles.particles;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonSyntaxException;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+import com.google.gson.stream.JsonReader;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.JsonOps;
 import eu.pb4.playerdata.api.PlayerDataApi;
-import me.drex.magic_particles.json.MagicParticle;
-import me.drex.magic_particles.json.adapter.ParticleOptionsAdapter;
-import me.drex.magic_particles.json.adapter.WorldCoordinatesAdapter;
+import me.drex.magic_particles.particles.particle.SimpleParticle;
 import me.drex.vanish.api.VanishAPI;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.commands.arguments.coordinates.WorldCoordinates;
-import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.commands.arguments.EntityAnchorArgument;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Display;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.phys.Vec3;
 import org.apache.commons.io.filefilter.SuffixFileFilter;
+import org.joml.Vector3f;
 
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Stream;
 
+import static me.drex.magic_particles.MagicParticlesMod.LOGGER;
 import static me.drex.magic_particles.MagicParticlesMod.PARTICLE;
 
 public class ParticleManager {
 
-    private static final Path PARTICLES_FOLDER = FabricLoader.getInstance().getConfigDir().resolve("magic-particles");
+    public static final Path PARTICLES_FOLDER = FabricLoader.getInstance().getConfigDir().resolve("magic-particles");
     private static final String FILE_SUFFIX = ".json";
-    private static final Gson GSON = new GsonBuilder()
-            .registerTypeHierarchyAdapter(WorldCoordinates.class, new WorldCoordinatesAdapter())
-            .registerTypeHierarchyAdapter(ParticleOptions.class, new ParticleOptionsAdapter())
-            .setPrettyPrinting()
-            .create();
-    private static final Map<String, MagicParticle> defaultParticles = new HashMap<>() {{
-        put("heart", MagicParticles.smallHeart());
-        put("musician", MagicParticles.musician());
-        put("rainy_cloud", MagicParticles.rainyCloud());
-        put("rich", MagicParticles.rich());
-    }};
     private static final boolean VANISH = FabricLoader.getInstance().isModLoaded("melius-vanish");
-    public static final ParticleManager INSTANCE = new ParticleManager();
 
-    private final Map<String, MagicParticle> particleMap = new HashMap<>();
+    private static final Map<String, MagicParticle> particles = new HashMap<>();
 
-    private ParticleManager() {
-    }
-
-    public void init() {
-        // TODO:
+    public static void init() {
         load();
-        ServerTickEvents.START_SERVER_TICK.register(this::tick);
+        ServerTickEvents.START_SERVER_TICK.register(ParticleManager::tick);
     }
 
-    public boolean load() {
-        // TODO: Logging here (?)
-        // MagicParticlesMod.LOGGER.info("Loading magic particles...");
+    public static boolean load() {
+        LOGGER.info("Loading magic particles...");
         File folder = PARTICLES_FOLDER.toFile();
+
+        DataResult<JsonElement> dataResult1 = MagicParticle.CODEC.encodeStart(JsonOps.INSTANCE, new MagicParticle("Test", List.of(
+            new SimpleParticle(1, Vec3.ZERO, Vec3.ZERO, 0, new DustParticleOptions(new Vector3f(0, 0.5f, 1), 0.3f), EntityAnchorArgument.Anchor.FEET, Vec3.ZERO, Display.BillboardConstraints.FIXED)
+        )));
+        String string = dataResult1.resultOrPartial(System.out::println).get().toString();
+        System.out.println(string);
+
         if (folder.mkdirs()) {
             // Save defaults
-            for (Map.Entry<String, MagicParticle> entry : defaultParticles.entrySet()) {
+            Optional<Path> optionalPath = FabricLoader.getInstance().getModContainer("magic-particles").orElseThrow().findPath("magic-particles");
+            if (optionalPath.isPresent()) {
+                Path sourceFolder = optionalPath.get();
                 try {
-                    Files.writeString(PARTICLES_FOLDER.resolve(entry.getKey() + FILE_SUFFIX), GSON.toJson(entry.getValue()));
-                    particleMap.put(entry.getKey(), entry.getValue());
+                    try (Stream<Path> pathStream = Files.walk(sourceFolder)) {
+                        pathStream.forEach(source -> {
+                            try {
+                                Files.copy(source, PARTICLES_FOLDER.resolve(sourceFolder.relativize(source)), StandardCopyOption.REPLACE_EXISTING);
+                            } catch (IOException e) {
+                                LOGGER.error("Failed copy copy default magic particle data \"{}\"", source, e);
+                            }
+                        });
+                    }
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    LOGGER.error("Failed to load default magic particles", e);
+                }
+            } else {
+                LOGGER.warn("No default magic particles found");
+            }
+        }
+        File[] files = folder.listFiles((FileFilter) new SuffixFileFilter(FILE_SUFFIX));
+        if (files == null) {
+            // Abstract pathname does not denote a directory, or an I/O error occurred.
+            return false;
+        }
+        ImmutableMap.Builder<String, MagicParticle> builder = ImmutableMap.builder();
+        for (File file : files) {
+            if (file.isFile()) {
+                String id = file.getName();
+                id = id.substring(0, id.length() - FILE_SUFFIX.length());
+
+                try (JsonReader jsonReader = new JsonReader(Files.newBufferedReader(file.toPath(), StandardCharsets.UTF_8))) {
+                    jsonReader.setLenient(false);
+                    JsonElement jsonElement = JsonParser.parseReader(jsonReader);
+                    DataResult<MagicParticle> dataResult = MagicParticle.CODEC.parse(JsonOps.INSTANCE, jsonElement);
+                    String finalId = id;
+                    builder.put(id, dataResult.resultOrPartial(s -> {
+                        LOGGER.error("Failed to load magic particle \"{}\"", finalId);
+                        LOGGER.error(s);
+                    }).orElseThrow());
+                } catch (Exception e) {
+                    LOGGER.error("Failed to load magic particle \"{}\"", id, e);
                     return false;
                 }
             }
-        } else {
-            File[] files = folder.listFiles((FileFilter) new SuffixFileFilter(FILE_SUFFIX));
-            if (files == null) {
-                // Abstract pathname does not denote a directory, or an I/O error occurred.
-                return false;
-            }
-            ImmutableMap.Builder<String, MagicParticle> builder = ImmutableMap.builder();
-            for (File file : files) {
-                if (file.isFile()) {
-                    try {
-                        String json = Files.readString(file.toPath());
-                        MagicParticle magicParticle = GSON.fromJson(json, MagicParticle.class);
-                        String id = file.getName();
-                        id = id.substring(0, id.length() - FILE_SUFFIX.length());
-                        builder.put(id, magicParticle);
-                    } catch (IOException | JsonSyntaxException e) {
-                        e.printStackTrace();
-                        return false;
-                    }
-                }
-            }
-
-            particleMap.clear();
-            particleMap.putAll(builder.build());
         }
+
+        particles.clear();
+        particles.putAll(builder.build());
         return true;
     }
 
-    private void tick(MinecraftServer server) {
+    private static void tick(MinecraftServer server) {
         for (ServerPlayer player : server.getPlayerList().getPlayers()) {
             if (!shouldShow(player)) continue;
             StringTag tag = PlayerDataApi.getGlobalDataFor(player, PARTICLE, StringTag.TYPE);
             if (tag != null) {
                 String particle = tag.getAsString();
-                MagicParticle magicParticle = particleMap.get(particle);
+                MagicParticle magicParticle = particles.get(particle);
                 if (magicParticle != null) {
                     magicParticle.display(player.createCommandSourceStack());
                 }
@@ -115,12 +132,12 @@ public class ParticleManager {
         }
     }
 
-    private boolean shouldShow(ServerPlayer player) {
+    private static boolean shouldShow(ServerPlayer player) {
         return (!VANISH || !VanishAPI.isVanished(player)) && !player.isSpectator();
     }
 
-    public Map<String, MagicParticle> particleMap() {
-        return particleMap;
+    public static Map<String, MagicParticle> particles() {
+        return particles;
     }
 
 

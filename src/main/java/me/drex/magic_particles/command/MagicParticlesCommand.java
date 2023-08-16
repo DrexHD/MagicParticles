@@ -7,7 +7,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import eu.pb4.playerdata.api.PlayerDataApi;
-import me.drex.magic_particles.json.MagicParticle;
+import me.drex.magic_particles.particles.MagicParticle;
 import me.drex.magic_particles.particles.ParticleManager;
 import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.minecraft.ChatFormatting;
@@ -26,7 +26,7 @@ import static me.drex.magic_particles.MagicParticlesMod.PARTICLE;
 public class MagicParticlesCommand {
 
     private static final Predicate<CommandSourceStack> ROOT_PREDICATE = Permissions.require("magic-particles.root", 2);
-    public static final SuggestionProvider<CommandSourceStack> SUGGEST_MAGIC_PARTICLES = (context, builder) -> SharedSuggestionProvider.suggest(ParticleManager.INSTANCE.particleMap().keySet(), builder);
+    public static final SuggestionProvider<CommandSourceStack> SUGGEST_MAGIC_PARTICLES = (context, builder) -> SharedSuggestionProvider.suggest(ParticleManager.particles().keySet(), builder);
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         LiteralCommandNode<CommandSourceStack> rootNode = dispatcher.register(
@@ -55,7 +55,7 @@ public class MagicParticlesCommand {
     }
 
     private static int sendList(CommandContext<CommandSourceStack> ctx) {
-        Map<String, MagicParticle> particles = ParticleManager.INSTANCE.particleMap();
+        Map<String, MagicParticle> particles = ParticleManager.particles();
         MutableComponent component = Component.translatable("text.magic_particles.title",
                         Component.literal(String.valueOf(particles.size())).withStyle(ChatFormatting.YELLOW)
                 ).withStyle(ChatFormatting.GOLD)
@@ -67,11 +67,11 @@ public class MagicParticlesCommand {
                                         .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.translatable("text.magic_particles.disable.hover").withStyle(ChatFormatting.RED)))
                                 )
                 ).append(Component.literal(" | ").withStyle(ChatFormatting.GRAY));
-        component.append(ComponentUtils.formatList(particles.entrySet().stream().sorted(Comparator.comparing(o -> o.getValue().name)).toList(), entry ->
-                Component.literal(entry.getValue().name)
+        component.append(ComponentUtils.formatList(particles.entrySet().stream().sorted(Comparator.comparing(o -> o.getValue().name())).toList(), entry ->
+                Component.literal(entry.getValue().name())
                         .withStyle(ChatFormatting.GREEN)
                         .withStyle(style -> style.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                                                Component.literal(entry.getValue().name)
+                                                Component.literal(entry.getValue().name())
                                                         .withStyle(ChatFormatting.GOLD)
                                                         .append("\n")
                                                         .append(Component.literal(entry.getKey()).withStyle(ChatFormatting.DARK_GRAY))
@@ -87,8 +87,8 @@ public class MagicParticlesCommand {
 
 
     private static int reload(CommandContext<CommandSourceStack> ctx) {
-        if (ParticleManager.INSTANCE.load()) {
-            Map<String, MagicParticle> particles = ParticleManager.INSTANCE.particleMap();
+        if (ParticleManager.load()) {
+            Map<String, MagicParticle> particles = ParticleManager.particles();
             MutableComponent component = Component.translatable("text.magic_particles.reload").withStyle(ChatFormatting.GOLD);
             ctx.getSource().sendSuccess(() -> component, false);
             return particles.size();
@@ -101,12 +101,12 @@ public class MagicParticlesCommand {
 
     private static int setParticle(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
         String particle = StringArgumentType.getString(ctx, "particle");
-        if (!ParticleManager.INSTANCE.particleMap().containsKey(particle)) {
+        if (!ParticleManager.particles().containsKey(particle)) {
             ctx.getSource().sendFailure(Component.translatable("text.magic_particles.unknown"));
             return 0;
         } else {
             PlayerDataApi.setGlobalDataFor(ctx.getSource().getPlayerOrException(), PARTICLE, StringTag.valueOf(particle));
-            MutableComponent component = Component.translatable("text.magic_particles.set", Component.literal(ParticleManager.INSTANCE.particleMap().get(particle).name).withStyle(ChatFormatting.YELLOW)).withStyle(ChatFormatting.GOLD);
+            MutableComponent component = Component.translatable("text.magic_particles.set", Component.literal(ParticleManager.particles().get(particle).name()).withStyle(ChatFormatting.YELLOW)).withStyle(ChatFormatting.GOLD);
             ctx.getSource().sendSuccess(() -> component, false);
             return 1;
         }
