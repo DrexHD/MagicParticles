@@ -57,12 +57,6 @@ public class ParticleManager {
         LOGGER.info("Loading magic particles...");
         File folder = PARTICLES_FOLDER.toFile();
 
-        DataResult<JsonElement> dataResult1 = MagicParticle.CODEC.encodeStart(JsonOps.INSTANCE, new MagicParticle("Test", List.of(
-            new SimpleParticle(1, Vec3.ZERO, Vec3.ZERO, 0, new DustParticleOptions(new Vector3f(0, 0.5f, 1), 0.3f), EntityAnchorArgument.Anchor.FEET, Vec3.ZERO, Display.BillboardConstraints.FIXED)
-        )));
-        String string = dataResult1.resultOrPartial(System.out::println).get().toString();
-        System.out.println(string);
-
         if (folder.mkdirs()) {
             // Save defaults
             Optional<Path> optionalPath = FabricLoader.getInstance().getModContainer("magic-particles").orElseThrow().findPath("magic-particles");
