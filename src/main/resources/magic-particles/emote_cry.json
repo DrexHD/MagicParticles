@@ -8,14 +8,15 @@
       },
       "pos": [
         0.1,
-        0,
+        0.1,
         -0.3
       ],
       "origin": [
         0,
-        1.6,
+        -0.15,
         0
       ],
+      "anchor": "eyes",
       "billboard": "center"
     },
     {
@@ -25,14 +26,15 @@
       },
       "pos": [
         -0.1,
-        0,
+        0.1,
         -0.3
       ],
       "origin": [
         0,
-        1.6,
+        -0.15,
         0
       ],
+      "anchor": "eyes",
       "billboard": "center"
     }
   ]
