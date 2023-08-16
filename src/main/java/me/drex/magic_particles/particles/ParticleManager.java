@@ -7,22 +7,13 @@ import com.google.gson.stream.JsonReader;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
 import eu.pb4.playerdata.api.PlayerDataApi;
-import me.drex.magic_particles.particles.particle.SimpleParticle;
 import me.drex.vanish.api.VanishAPI;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.commands.arguments.EntityAnchorArgument;
-import net.minecraft.core.particles.BlockParticleOption;
-import net.minecraft.core.particles.DustParticleOptions;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.Display;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.phys.Vec3;
 import org.apache.commons.io.filefilter.SuffixFileFilter;
-import org.joml.Vector3f;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -32,7 +23,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -66,7 +56,7 @@ public class ParticleManager {
                     try (Stream<Path> pathStream = Files.walk(sourceFolder)) {
                         pathStream.forEach(source -> {
                             try {
-                                Files.copy(source, PARTICLES_FOLDER.resolve(sourceFolder.relativize(source)), StandardCopyOption.REPLACE_EXISTING);
+                                Files.copy(source, PARTICLES_FOLDER.resolve(sourceFolder.relativize(source).toString()), StandardCopyOption.REPLACE_EXISTING);
                             } catch (IOException e) {
                                 LOGGER.error("Failed copy copy default magic particle data \"{}\"", source, e);
                             }

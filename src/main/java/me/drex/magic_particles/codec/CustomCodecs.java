@@ -2,7 +2,6 @@ package me.drex.magic_particles.codec;
 
 import com.mojang.serialization.Codec;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
-import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.util.ExtraCodecs;
 
 public class CustomCodecs {
