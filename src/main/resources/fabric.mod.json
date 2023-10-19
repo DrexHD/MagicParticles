@@ -4,7 +4,7 @@
   "version": "${version}",
 
   "name": "Magic Particles",
-  "description": "Completely customizable cosmetic player particles",
+  "description": "A server side cosmetics mod, that allows administrator to create custom particles using simple json files",
   "authors": [
     "Drex"
   ],
