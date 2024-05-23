@@ -12,7 +12,7 @@ public class MagicParticlesMod implements DedicatedServerModInitializer {
 
 	public static final String MOD_ID = "magic-particles";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
-	public static final ResourceLocation PARTICLE = new ResourceLocation(MOD_ID, "particle");
+	public static final ResourceLocation PARTICLE = ResourceLocation.fromNamespaceAndPath(MOD_ID, "particle");
 
 	@Override
 	public void onInitializeServer() {

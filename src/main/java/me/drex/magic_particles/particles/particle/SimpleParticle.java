@@ -15,7 +15,7 @@ import net.minecraft.world.phys.Vec3;
 
 public class SimpleParticle extends AbstractParticle {
 
-    public static final ResourceLocation LOCATION = new ResourceLocation("simple");
+    public static final ResourceLocation LOCATION = ResourceLocation.withDefaultNamespace("simple");
     public static final MapCodec<SimpleParticle> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         Codec.INT.optionalFieldOf("count", 1).forGetter(SimpleParticle::count),
         Vec3.CODEC.fieldOf("pos").forGetter(SimpleParticle::pos),
