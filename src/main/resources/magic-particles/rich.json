@@ -6,9 +6,7 @@
       "speed": 24.0,
       "particle_type": {
         "type": "minecraft:block",
-        "value": {
-          "Name": "minecraft:emerald_block"
-        }
+        "block_state": "minecraft:emerald_block"
       },
       "pos": [
         0.0,
@@ -26,9 +24,7 @@
       "speed": 24.0,
       "particle_type": {
         "type": "minecraft:block",
-        "value": {
-          "Name": "minecraft:diamond_block"
-        }
+        "block_state": "minecraft:diamond_block"
       },
       "pos": [
         0.0,
@@ -46,9 +42,7 @@
       "speed": 24.0,
       "particle_type": {
         "type": "minecraft:block",
-        "value": {
-          "Name": "minecraft:gold_block"
-        }
+        "block_state": "minecraft:gold_block"
       },
       "pos": [
         0.0,
