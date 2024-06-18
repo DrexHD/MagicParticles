@@ -1,0 +1,11 @@
+{
+  "text.magic_particles.overview": "<gold>Particle Animations [</gold><yellow>${count}</yellow><gold>]:</gold>\n <red><run_cmd:'/mp disable'><hover:'<red>Click to disable!</red>'>Disable</hover></run_cmd></red> <gray>|</gray> ${list}",
+  "text.magic_particles.overview.list.separator": "<gray>,</gray> ",
+  "text.magic_particles.overview.list.element": "<green><run_cmd:'/mp set ${id}'><hover:'<gold>${name}</gold>\n<dark_gray>id\\: ${id}</dark_gray>\n<green>Click to apply</green>'>${name}</hover></run_cmd></green>",
+
+  "text.magic_particles.unset": "<red>Magic Particles have been disabled.</red>",
+  "text.magic_particles.reload": "<gray>Reloaded Magic Particles!</gray>",
+  "text.magic_particles.error": "<dark_red>Something went wrong, please check logs.</dark_red>",
+  "text.magic_particles.unknown": "<red>Unknown Magic Particle!</red>",
+  "text.magic_particles.set": "<gold>Magic Particle</gold> <yellow>${name}</yellow> <gold>has been selected.</gold>"
+}
