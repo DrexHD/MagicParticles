@@ -18,7 +18,7 @@ import java.util.List;
 
 public class BezierParticle extends AbstractParticle {
 
-    public static final ResourceLocation LOCATION = ResourceLocation.withDefaultNamespace("bezier");
+    public static final ResourceLocation LOCATION = new ResourceLocation("bezier");
     public static final MapCodec<BezierParticle> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         Codec.list(Codec.list(Vec3.CODEC)).fieldOf("curves").forGetter(BezierParticle::curves),
         Codec.INT.fieldOf("steps").forGetter(BezierParticle::steps),

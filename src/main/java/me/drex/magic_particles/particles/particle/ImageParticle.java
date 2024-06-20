@@ -22,7 +22,7 @@ import java.io.IOException;
 // TODO: Add rotation and axis variables
 public class ImageParticle extends AbstractParticle {
 
-    public static final ResourceLocation LOCATION = ResourceLocation.withDefaultNamespace("image");
+    public static final ResourceLocation LOCATION = new ResourceLocation("image");
     public static final MapCodec<ImageParticle> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         Codec.STRING.fieldOf("image").forGetter(ImageParticle::image),
         Codec.FLOAT.fieldOf("size_x").forGetter(ImageParticle::sizeX),
