@@ -12,7 +12,7 @@
   "icon": "assets/magic_particles/icon.png",
   "environment": "*",
   "entrypoints": {
-    "server": [
+    "main": [
       "me.drex.magic_particles.MagicParticlesMod"
     ]
   },
