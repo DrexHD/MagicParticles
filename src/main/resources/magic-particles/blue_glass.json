@@ -15,7 +15,9 @@
       "type": "simple",
       "particle_type": {
         "type": "minecraft:block",
-        "block_state": "blue_stained_glass"
+        "value": {
+          "Name": "blue_stained_glass"
+        }
       }
     },
     {
@@ -32,7 +34,9 @@
       "type": "simple",
       "particle_type": {
         "type": "minecraft:block",
-        "block_state": "white_stained_glass"
+        "value": {
+          "Name": "white_stained_glass"
+        }
       }
     },
     {
@@ -49,7 +53,9 @@
       "type": "simple",
       "particle_type": {
         "type": "minecraft:block",
-        "block_state": "light_blue_stained_glass"
+        "value": {
+          "Name": "light_blue_stained_glass"
+        }
       }
     },
     {
@@ -66,7 +72,9 @@
       "type": "simple",
       "particle_type": {
         "type": "minecraft:block",
-        "block_state": "cyan_stained_glass"
+        "value": {
+          "Name": "cyan_stained_glass"
+        }
       }
     }
   ]
