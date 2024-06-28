@@ -38,7 +38,9 @@ dependencies {
     }
 
     // Mod dependencies
-    modImplementation include("me.lucko:fabric-permissions-api:${project.permission_api_version}")
+    modImplementation include("me.lucko:fabric-permissions-api:${project.permission_api_version}"){
+        exclude group: "net.fabricmc.fabric-api"
+    }
     modImplementation include("eu.pb4:player-data-api:${project.player_data_api_version}")
     modImplementation include("com.github.DrexHD:message-api:${project.message_api_version}")
     modImplementation include("eu.pb4:placeholder-api:${project.placeholder_api_version}")

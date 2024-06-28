@@ -16,6 +16,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.nbt.StringTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentUtils;
 import net.minecraft.network.chat.MutableComponent;
 
@@ -61,16 +62,16 @@ public class MagicParticlesCommand {
         MutableComponent list = ComponentUtils.formatList(
             particles.entrySet(),
             LocalizedMessage.localized("text.magic_particles.overview.list.separator"),
-            particleEntry -> LocalizedMessage.builder("text.magic_particles.overview.list.element")
-                .addPlaceholder("id", particleEntry.getKey())
-                .addPlaceholder("name", particleEntry.getValue().name())
-                .build()
+            particleEntry -> LocalizedMessage.localized("text.magic_particles.overview.list.element", Map.of(
+                "id", Component.literal(particleEntry.getKey()),
+                "name", Component.literal(particleEntry.getValue().name())
+            ))
         );
 
-        ctx.getSource().sendSuccess(() -> LocalizedMessage.builder("text.magic_particles.overview")
-            .addPlaceholder("count", particles.size())
-            .addPlaceholder("list", list)
-            .build(), false);
+        ctx.getSource().sendSuccess(() -> LocalizedMessage.localized("text.magic_particles.overview", Map.of(
+                "count", Component.literal(String.valueOf(particles.size())),
+                "list", list
+            )), false);
         return particles.size();
     }
 
@@ -95,7 +96,10 @@ public class MagicParticlesCommand {
         } else {
             PlayerDataApi.setGlobalDataFor(ctx.getSource().getPlayerOrException(), PARTICLE, StringTag.valueOf(particle));
             String name = ParticleManager.particles().get(particle).name();
-            ctx.getSource().sendSuccess(() -> LocalizedMessage.builder("text.magic_particles.set").addPlaceholder("id", particle).addPlaceholder("name", name).build(), false);
+            ctx.getSource().sendSuccess(() -> LocalizedMessage.localized("text.magic_particles.set", Map.of(
+                "id", Component.literal(particle),
+                "name", Component.literal(name)
+            )), false);
             return 1;
         }
     }
