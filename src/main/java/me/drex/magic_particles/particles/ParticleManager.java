@@ -1,30 +1,43 @@
 package me.drex.magic_particles.particles;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Streams;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
 import eu.pb4.playerdata.api.PlayerDataApi;
+import me.drex.magic_particles.MagicParticlesMod;
 import me.drex.vanish.api.VanishAPI;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.CrashReport;
+import net.minecraft.CrashReportCategory;
+import net.minecraft.Util;
 import net.minecraft.nbt.StringTag;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.Bootstrap;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.GameRules;
 import org.apache.commons.io.filefilter.SuffixFileFilter;
 
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
+import java.lang.management.ManagementFactory;
+import java.lang.management.ThreadInfo;
+import java.lang.management.ThreadMXBean;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static me.drex.magic_particles.MagicParticlesMod.LOGGER;
@@ -40,7 +53,39 @@ public class ParticleManager {
 
     public static void init() {
         load();
-        ServerTickEvents.START_SERVER_TICK.register(ParticleManager::tick);
+        ServerTickEvents.START_SERVER_TICK.register(server -> {
+            try {
+                ParticleManager.tick(server);
+            } catch (ConcurrentModificationException e) {
+                LOGGER.error("Server wanted to crash, but we said no", e);
+                dumpCrashReport(server, e);
+            }
+        });
+    }
+
+    private static void dumpCrashReport(MinecraftServer server, ConcurrentModificationException error) {
+        // [VanillaCopy]
+        ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
+        ThreadInfo[] threadInfos = threadMXBean.dumpAllThreads(true, true);
+        StringBuilder stringBuilder = new StringBuilder();
+        for (ThreadInfo threadInfo : threadInfos) {
+            if (threadInfo.getThreadId() == server.getRunningThread().getId()) {
+                error.setStackTrace(threadInfo.getStackTrace());
+            }
+            stringBuilder.append(threadInfo);
+            stringBuilder.append("\n");
+        }
+        CrashReport crashReport = new CrashReport("MagicParticles fake crash", error);
+        server.fillSystemReport(crashReport.getSystemReport());
+        CrashReportCategory crashReportCategory = crashReport.addCategory("Thread Dump");
+        crashReportCategory.setDetail("Threads", stringBuilder);
+        Bootstrap.realStdoutPrintln("Crash report:\n" + crashReport.getFriendlyReport());
+        File file = new File(new File(server.getServerDirectory(), "crash-reports"), "crash-" + Util.getFilenameFormattedDateTime() + "-magic-particles.txt");
+        if (crashReport.saveToFile(file)) {
+            LOGGER.error("This crash report has been saved to: {}", file.getAbsolutePath());
+        } else {
+            LOGGER.error("We were unable to save this crash report to disk.");
+        }
     }
 
     public static boolean load() {
