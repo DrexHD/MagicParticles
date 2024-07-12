@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.2] - 2024-07-12
+### Fixed
+- Incompatibility with adventure-platform-fabric
+
 ## [1.2.1] - 2024-06-28
 ### Fixed
 - Client side exceptions
