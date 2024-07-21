@@ -29,6 +29,7 @@ dependencies {
     // Fabric API
     Set<String> apiModules = [
             "fabric-command-api-v2",
+            "fabric-events-interaction-v0", // fake player
             "fabric-lifecycle-events-v1",
             "fabric-message-api-v1", // melius-vanish
             "fabric-resource-loader-v0" // server_translations_api
