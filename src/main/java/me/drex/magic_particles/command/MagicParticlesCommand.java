@@ -27,7 +27,10 @@ import static me.drex.magic_particles.MagicParticlesMod.PARTICLE;
 public class MagicParticlesCommand {
 
     private static final Predicate<CommandSourceStack> ROOT_PREDICATE = Permissions.require("magic-particles.root", 2);
-    public static final SuggestionProvider<CommandSourceStack> SUGGEST_MAGIC_PARTICLES = (context, builder) -> SharedSuggestionProvider.suggest(ParticleManager.particles().keySet(), builder);
+    public static final SuggestionProvider<CommandSourceStack> SUGGEST_MAGIC_PARTICLES = (context, builder) -> SharedSuggestionProvider.suggest(() -> ParticleManager.particles().keySet()
+        .stream()
+        .filter(id -> Permissions.check(context.getSource(), "magic-particles.particle." + id, true))
+        .iterator(), builder);
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         LiteralCommandNode<CommandSourceStack> rootNode = dispatcher.register(
@@ -92,12 +95,15 @@ public class MagicParticlesCommand {
         if (!ParticleManager.particles().containsKey(particle)) {
             ctx.getSource().sendFailure(LocalizedMessage.localized("text.magic_particles.unknown"));
             return 0;
-        } else {
-            PlayerDataApi.setGlobalDataFor(ctx.getSource().getPlayerOrException(), PARTICLE, StringTag.valueOf(particle));
-            String name = ParticleManager.particles().get(particle).name();
-            ctx.getSource().sendSuccess(() -> LocalizedMessage.builder("text.magic_particles.set").addPlaceholder("id", particle).addPlaceholder("name", name).build(), false);
-            return 1;
         }
+        String name = ParticleManager.particles().get(particle).name();
+        if (!Permissions.check(ctx.getSource(), "magic-particles.particle." + particle, true)) {
+            ctx.getSource().sendFailure(LocalizedMessage.builder("text.magic_particles.missing_permission").addPlaceholder("id", particle).addPlaceholder("name", name).build());
+            return 0;
+        }
+        PlayerDataApi.setGlobalDataFor(ctx.getSource().getPlayerOrException(), PARTICLE, StringTag.valueOf(particle));
+        ctx.getSource().sendSuccess(() -> LocalizedMessage.builder("text.magic_particles.set").addPlaceholder("id", particle).addPlaceholder("name", name).build(), false);
+        return 1;
     }
 
     private static int disable(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {

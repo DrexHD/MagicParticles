@@ -7,5 +7,6 @@
   "text.magic_particles.reload": "<gray>Reloaded Magic Particles!</gray>",
   "text.magic_particles.error": "<dark_red>Something went wrong, please check logs.</dark_red>",
   "text.magic_particles.unknown": "<red>Unknown Magic Particle!</red>",
+  "text.magic_particles.missing_permission": "<red>You don't have permission to use ${name}!</red>",
   "text.magic_particles.set": "<gold>Magic Particle</gold> <yellow>${name}</yellow> <gold>has been selected.</gold>"
 }

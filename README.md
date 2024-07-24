@@ -10,6 +10,9 @@ A fabric server side cosmetics mod, that allows administrator to create custom p
 - `/mp disable` - Disable current magic particle - `magic-particles.disable`
 - `/mp reload` - Reload magic particles and messages - `magic-particles.reload`
 
+By default, players have access to all magic particles (assuming they have the permissions required to run the command).
+Magic particles can be *disabled* for specific players by denying the `magic-particles.particle.<id>` permission.
+
 ## Custom Particles
 
 This mod includes more than [40 default particles](https://github.com/DrexHD/MagicParticles/tree/1.21/src/main/resources/magic-particles), which can be useful example
