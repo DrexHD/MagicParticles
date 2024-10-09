@@ -10,10 +10,10 @@ import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.ARGB;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Display;
 import net.minecraft.world.phys.Vec3;
-import org.joml.Vector3f;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -70,7 +70,7 @@ public class ImageParticle extends AbstractParticle {
                 int blue = color & 0xff;
                 int alpha = (color & 0xff000000) >>> 24;
 
-                DustParticleOptions particleOptions = new DustParticleOptions(new Vector3f((float) red / 255, (float) green / 255, (float) blue / 255), pixelSize);
+                DustParticleOptions particleOptions = new DustParticleOptions(ARGB.color(red, green, blue), pixelSize);
                 double reversedX = bufferedImage.getWidth() - 1 - x;
                 double centeredX = reversedX - ((double) (bufferedImage.getWidth() - 1) / 2);
                 double reversedY = bufferedImage.getHeight() - 1 - y;
