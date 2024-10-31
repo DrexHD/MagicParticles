@@ -60,7 +60,7 @@ public abstract class AbstractParticle {
 
         Vector3f rotatedPosition = anchor.apply(source).toVector3f().add(offset).add(origin.toVector3f());
 
-        source.getLevel().sendParticles(player, particleOptions, force, rotatedPosition.x, rotatedPosition.y, rotatedPosition.z, count, delta.x, delta.y, delta.z, speed);
+        source.getLevel().sendParticles(player, particleOptions, false, force, rotatedPosition.x, rotatedPosition.y, rotatedPosition.z, count, delta.x, delta.y, delta.z, speed);
     }
 
     public abstract void sendParticles(CommandSourceStack source, ServerPlayer player);
