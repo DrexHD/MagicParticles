@@ -106,7 +106,7 @@ public class ParticleManager {
             if (!shouldShow(player)) continue;
             StringTag tag = PlayerDataApi.getGlobalDataFor(player, PARTICLE, StringTag.TYPE);
             if (tag != null) {
-                String particle = tag.getAsString();
+                String particle = tag.value();
                 MagicParticle magicParticle = particles.get(particle);
                 if (magicParticle != null) {
                     magicParticle.display(player.createCommandSourceStack());

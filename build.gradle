@@ -1,7 +1,7 @@
 import org.jetbrains.changelog.Changelog
 
 plugins {
-    id 'fabric-loom' version '1.7-SNAPSHOT'
+    id 'fabric-loom' version '1.10-SNAPSHOT'
     id "me.modmuss50.mod-publish-plugin" version "0.+"
     id 'org.jetbrains.changelog' version '2.+'
 }
@@ -16,7 +16,6 @@ repositories {
     maven { url "https://api.modrinth.com/maven" }
     maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
     maven { url "https://maven.nucleoid.xyz/" }
-    maven { url = "https://jitpack.io" }
     mavenCentral()
 }
 
@@ -40,7 +39,7 @@ dependencies {
     // Mod dependencies
     modImplementation include("me.lucko:fabric-permissions-api:${project.permission_api_version}")
     modImplementation include("eu.pb4:player-data-api:${project.player_data_api_version}")
-    modImplementation include("com.github.DrexHD:message-api:${project.message_api_version}")
+    modImplementation include("maven.modrinth:message-api:${project.message_api_version}")
     modImplementation include("eu.pb4:placeholder-api:${project.placeholder_api_version}")
 
     modCompileOnly ("maven.modrinth:vanish:${project.vanish_version}"){
