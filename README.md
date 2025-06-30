@@ -64,6 +64,7 @@ values in addition to their specialized ones.
   "pos": [1.0, 2.0, 0.0], // Offset from origin (affected by rotation)
   "anchor": "feet", // The particle origin ["feet"|"eyes"] (optional)
   "origin": [0.0, 0.5, 0.0], // Offset from origin (optional)
+  "rotation": [90, 0], // A rotation applied to the image
   "billboard": "fixed" // What rotation axis should affect "pos" ["fixed", "vertical", "horizontal", "center"] (optional)
 }
 ```

@@ -64,6 +64,6 @@ public class SimpleParticle extends AbstractParticle {
 
     @Override
     public void sendParticles(CommandSourceStack source, ServerPlayer player) {
-        sendParticles(source, player, particleOptions, false, pos, count, delta, speed);
+        sendParticles(source, player, particleOptions, false, pos.toVector3f(), count, delta, speed);
     }
 }

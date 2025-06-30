@@ -13,13 +13,15 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.ARGB;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Display;
+import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-// TODO: Add rotation and axis variables
 public class ImageParticle extends AbstractParticle {
 
     public static final ResourceLocation LOCATION = ResourceLocation.withDefaultNamespace("image");
@@ -31,6 +33,7 @@ public class ImageParticle extends AbstractParticle {
         Vec3.CODEC.optionalFieldOf("pos", Vec3.ZERO).forGetter(ImageParticle::pos),
         CustomCodecs.ANCHOR.optionalFieldOf("anchor", EntityAnchorArgument.Anchor.FEET).forGetter(ImageParticle::anchor),
         Vec3.CODEC.optionalFieldOf("origin", Vec3.ZERO).forGetter(ImageParticle::origin),
+        Vec2.CODEC.optionalFieldOf("rotation", Vec2.ZERO).forGetter(ImageParticle::rotation),
         Display.BillboardConstraints.CODEC.optionalFieldOf("billboard", Display.BillboardConstraints.FIXED).forGetter(ImageParticle::billboard)
     ).apply(instance, ImageParticle::new));
 
@@ -39,16 +42,18 @@ public class ImageParticle extends AbstractParticle {
     private final float sizeY;
     private final float pixelSize;
     private final Vec3 pos;
+    private final Vec2 rotation;
     private final BufferedImage bufferedImage;
     private final RandomSource random;
 
-    protected ImageParticle(String image, float sizeX, float sizeY, float pixelSize, Vec3 pos, EntityAnchorArgument.Anchor anchor, Vec3 origin, Display.BillboardConstraints billboard) {
+    protected ImageParticle(String image, float sizeX, float sizeY, float pixelSize, Vec3 pos, EntityAnchorArgument.Anchor anchor, Vec3 origin, Vec2 rotation, Display.BillboardConstraints billboard) {
         super(LOCATION, CODEC, anchor, origin, billboard);
         this.image = image;
         this.sizeX = sizeX;
         this.sizeY = sizeY;
         this.pixelSize = pixelSize;
         this.pos = pos;
+        this.rotation = rotation;
         try {
             bufferedImage = ImageIO.read(ParticleManager.PARTICLES_FOLDER.resolve("images").resolve(image).toFile());
         } catch (IOException e) {
@@ -59,8 +64,8 @@ public class ImageParticle extends AbstractParticle {
 
     @Override
     public void sendParticles(CommandSourceStack source, ServerPlayer player) {
-        double stepX = sizeX / bufferedImage.getWidth();
-        double stepY = sizeY / bufferedImage.getHeight();
+        float stepX = sizeX / bufferedImage.getWidth();
+        float stepY = sizeY / bufferedImage.getHeight();
         for (int x = 0; x < bufferedImage.getWidth(); x++) {
             for (int y = 0; y < bufferedImage.getHeight(); y++) {
                 int color = bufferedImage.getRGB(x, y);
@@ -71,15 +76,17 @@ public class ImageParticle extends AbstractParticle {
                 int alpha = (color & 0xff000000) >>> 24;
 
                 DustParticleOptions particleOptions = new DustParticleOptions(ARGB.color(red, green, blue), pixelSize);
-                double reversedX = bufferedImage.getWidth() - 1 - x;
-                double centeredX = reversedX - ((double) (bufferedImage.getWidth() - 1) / 2);
-                double reversedY = bufferedImage.getHeight() - 1 - y;
-                double centeredY = reversedY - ((double) (bufferedImage.getHeight() - 1) / 2);
+                float reversedX = bufferedImage.getWidth() - 1 - x;
+                float centeredX = reversedX - ((float) (bufferedImage.getWidth() - 1) / 2);
+                float reversedY = bufferedImage.getHeight() - 1 - y;
+                float centeredY = reversedY - ((float) (bufferedImage.getHeight() - 1) / 2);
 
+                Quaternionf rotation = new Quaternionf().rotationYXZ((float) Math.PI - (float) Math.PI / 180 * this.rotation.y, (float) (-Math.PI) / 180 * this.rotation.x, 0.0f);
+                Vector3f offset = new Vector3f(stepX * centeredX, stepY * centeredY, 0).add(pos.toVector3f());
+                offset = offset.rotate(rotation);
 
-                Vec3 vec3 = new Vec3(stepX * centeredX, stepY * centeredY, 0).add(pos);
                 if (alpha >= random.nextIntBetweenInclusive(1, 255)) {
-                    sendParticles(source, player, particleOptions, false, vec3, 1, Vec3.ZERO, 0);
+                    sendParticles(source, player, particleOptions, false, offset, 1, Vec3.ZERO, 0);
                 }
             }
         }
@@ -91,6 +98,10 @@ public class ImageParticle extends AbstractParticle {
 
     public Vec3 pos() {
         return pos;
+    }
+
+    public Vec2 rotation() {
+        return rotation;
     }
 
     public float sizeX() {

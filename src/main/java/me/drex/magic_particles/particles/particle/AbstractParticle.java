@@ -38,8 +38,7 @@ public abstract class AbstractParticle {
         return this.codec;
     }
 
-    public void sendParticles(CommandSourceStack source, ServerPlayer player, ParticleOptions particleOptions, boolean force, Vec3 pos, int count, Vec3 delta, float speed) {
-        Vector3f offset = pos.toVector3f();
+    public void sendParticles(CommandSourceStack source, ServerPlayer player, ParticleOptions particleOptions, boolean force, Vector3f offset, int count, Vec3 delta, float speed) {
 
         Vec2 rotation = source.getRotation();
         float rotX = Mth.wrapDegrees(rotation.x);
@@ -56,7 +55,6 @@ public abstract class AbstractParticle {
         };
 
         offset.rotate(quaternionf);
-
 
         Vector3f rotatedPosition = anchor.apply(source).toVector3f().add(offset).add(origin.toVector3f());
 

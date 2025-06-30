@@ -47,8 +47,8 @@ public class BezierParticle extends AbstractParticle {
         double step = 1D / steps;
         for (List<Vec3> curve : curves) {
             for (double t = 0; t < 1; t += step) {
-                Vector3f vector3f = calculateBezierCurve(curve, t);
-                sendParticles(source, player, particleOptions, false, new Vec3(vector3f), 1, Vec3.ZERO, speed);
+                Vector3f offset = calculateBezierCurve(curve, t);
+                sendParticles(source, player, particleOptions, false, offset, 1, Vec3.ZERO, speed);
             }
             // debug control points
             /*for (int i = 0; i < curve.size(); i++) {
