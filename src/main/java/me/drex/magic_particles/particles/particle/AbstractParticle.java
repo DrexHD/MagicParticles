@@ -43,7 +43,7 @@ public abstract class AbstractParticle {
     public ClientboundLevelParticlesPacket createParticlePacket(CommandSourceStack source, ParticleOptions particleOptions, boolean force, Vector3f offset, int count, Vec3 delta, float speed, Quaternionf billboardRotation) {
         offset.rotate(billboardRotation);
         Vector3f rotatedPosition = anchor.apply(source).toVector3f().add(offset).add(origin.toVector3f());
-        return new ClientboundLevelParticlesPacket(particleOptions, false, force, rotatedPosition.x, rotatedPosition.y, rotatedPosition.z, (float) delta.x, (float) delta.y, (float) delta.z, speed, count);
+        return new ClientboundLevelParticlesPacket(particleOptions, /*? if >= 1.21.4 {*/ /*false, *//*?}*/ force, rotatedPosition.x, rotatedPosition.y, rotatedPosition.z, (float) delta.x, (float) delta.y, (float) delta.z, speed, count);
     }
 
     Quaternionf getBillboardRotation(CommandSourceStack source) {
