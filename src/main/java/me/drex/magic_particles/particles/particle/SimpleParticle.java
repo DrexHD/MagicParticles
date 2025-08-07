@@ -8,10 +8,12 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.protocol.game.ClientboundLevelParticlesPacket;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Display;
 import net.minecraft.world.phys.Vec3;
+
+import java.util.function.Consumer;
 
 public class SimpleParticle extends AbstractParticle {
 
@@ -63,7 +65,7 @@ public class SimpleParticle extends AbstractParticle {
     }
 
     @Override
-    public void sendParticles(CommandSourceStack source, ServerPlayer player) {
-        sendParticles(source, player, particleOptions, false, pos.toVector3f(), count, delta, speed);
+    public void collectParticlePackets(CommandSourceStack source, Consumer<ClientboundLevelParticlesPacket> collector) {
+        collector.accept(createParticlePacket(source, particleOptions, false, pos.toVector3f(), count, delta, speed, getBillboardRotation(source)));
     }
 }

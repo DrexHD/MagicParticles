@@ -4,14 +4,16 @@ import com.mojang.serialization.MapCodec;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.network.protocol.game.ClientboundLevelParticlesPacket;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Display;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
+
+import java.util.function.Consumer;
 
 public abstract class AbstractParticle {
 
@@ -38,30 +40,26 @@ public abstract class AbstractParticle {
         return this.codec;
     }
 
-    public void sendParticles(CommandSourceStack source, ServerPlayer player, ParticleOptions particleOptions, boolean force, Vector3f offset, int count, Vec3 delta, float speed) {
+    public ClientboundLevelParticlesPacket createParticlePacket(CommandSourceStack source, ParticleOptions particleOptions, boolean force, Vector3f offset, int count, Vec3 delta, float speed, Quaternionf billboardRotation) {
+        offset.rotate(billboardRotation);
+        Vector3f rotatedPosition = anchor.apply(source).toVector3f().add(offset).add(origin.toVector3f());
+        return new ClientboundLevelParticlesPacket(particleOptions, false, force, rotatedPosition.x, rotatedPosition.y, rotatedPosition.z, (float) delta.x, (float) delta.y, (float) delta.z, speed, count);
+    }
 
+    Quaternionf getBillboardRotation(CommandSourceStack source) {
         Vec2 rotation = source.getRotation();
         float rotX = Mth.wrapDegrees(rotation.x);
         float rotY = Mth.wrapDegrees(rotation.y);
-
-        Quaternionf quaternionf = switch (billboard) {
+        return switch (billboard) {
             case FIXED -> new Quaternionf();
-            case HORIZONTAL ->
-                new Quaternionf().rotationYXZ(0, (float) (-Math.PI) / 180 * rotX, 0.0f);
-            case VERTICAL ->
-                new Quaternionf().rotationYXZ((float) Math.PI - (float) Math.PI / 180 * rotY, 0, 0.0f);
+            case HORIZONTAL -> new Quaternionf().rotationYXZ(0, (float) (-Math.PI) / 180 * rotX, 0.0f);
+            case VERTICAL -> new Quaternionf().rotationYXZ((float) Math.PI - (float) Math.PI / 180 * rotY, 0, 0.0f);
             case CENTER ->
                 new Quaternionf().rotationYXZ((float) Math.PI - (float) Math.PI / 180 * rotY, (float) (-Math.PI) / 180 * rotX, 0.0f);
         };
-
-        offset.rotate(quaternionf);
-
-        Vector3f rotatedPosition = anchor.apply(source).toVector3f().add(offset).add(origin.toVector3f());
-
-        source.getLevel().sendParticles(player, particleOptions, false, force, rotatedPosition.x, rotatedPosition.y, rotatedPosition.z, count, delta.x, delta.y, delta.z, speed);
     }
 
-    public abstract void sendParticles(CommandSourceStack source, ServerPlayer player);
+    public abstract void collectParticlePackets(CommandSourceStack source, Consumer<ClientboundLevelParticlesPacket> collector);
 
     public Vec3 origin() {
         return origin;

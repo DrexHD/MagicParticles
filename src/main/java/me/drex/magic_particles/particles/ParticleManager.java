@@ -112,7 +112,6 @@ public class ParticleManager {
                     magicParticle.display(player.createCommandSourceStack());
                 }
             }
-
         }
     }
 

@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Rotation field to images
 
+### Changed
+- Improved performance of image particles
+
 ## [1.2.3] - 2024-07-24
 ### Added
 - Particle permission to allow further configuration (allowed by default) 

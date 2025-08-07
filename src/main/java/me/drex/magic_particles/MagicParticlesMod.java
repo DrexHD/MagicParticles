@@ -2,7 +2,6 @@ package me.drex.magic_particles;
 
 import me.drex.magic_particles.command.MagicParticlesCommand;
 import me.drex.magic_particles.particles.ParticleManager;
-import net.fabricmc.api.DedicatedServerModInitializer;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.resources.ResourceLocation;

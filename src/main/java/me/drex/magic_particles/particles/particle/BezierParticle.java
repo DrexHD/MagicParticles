@@ -8,13 +8,14 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.protocol.game.ClientboundLevelParticlesPacket;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Display;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 public class BezierParticle extends AbstractParticle {
 
@@ -43,21 +44,20 @@ public class BezierParticle extends AbstractParticle {
     }
 
     @Override
-    public void sendParticles(CommandSourceStack source, ServerPlayer player) {
+    public void collectParticlePackets(CommandSourceStack source, Consumer<ClientboundLevelParticlesPacket> collector) {
         double step = 1D / steps;
         for (List<Vec3> curve : curves) {
             for (double t = 0; t < 1; t += step) {
                 Vector3f offset = calculateBezierCurve(curve, t);
-                sendParticles(source, player, particleOptions, false, offset, 1, Vec3.ZERO, speed);
+                collector.accept(createParticlePacket(source, particleOptions, false, offset, 1, Vec3.ZERO, speed, getBillboardRotation(source)));
             }
             // debug control points
             /*for (int i = 0; i < curve.size(); i++) {
                 Vec3 control = curve.get(i);
-                sendParticles(source, player, new DustParticleOptions(new Vector3f(0, (float) i / curves.size(), 0), 0.5f), false, control, 1, delta, speed);
+                collector.accept(sendParticles(source, player, new DustParticleOptions(new Vector3f(0, (float) i / curves.size(), 0), 0.5f), false, control, 1, delta, speed));
             }*/
         }
     }
-
 
     // https://en.wikipedia.org/wiki/B%C3%A9zier_curve#Explicit_definition
     private Vector3f calculateBezierCurve(List<Vec3> points, double t) {
