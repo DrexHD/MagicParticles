@@ -106,7 +106,7 @@ public class ParticleManager {
             if (!shouldShow(player)) continue;
             StringTag tag = PlayerDataApi.getGlobalDataFor(player, PARTICLE, StringTag.TYPE);
             if (tag != null) {
-                String particle = tag./*? if >= 1.21.5 {*/ /*value*/ /*? } else {*/ getAsString /*?}*/();
+                String particle = tag./*? if >= 1.21.5 {*/ value /*?} else {*/ /*getAsString *//*?}*/();
                 MagicParticle magicParticle = particles.get(particle);
                 if (magicParticle != null) {
                     magicParticle.display(player.createCommandSourceStack());
