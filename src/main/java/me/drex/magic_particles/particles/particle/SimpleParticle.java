@@ -9,7 +9,7 @@ import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.game.ClientboundLevelParticlesPacket;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Display;
 import net.minecraft.world.phys.Vec3;
 
@@ -17,7 +17,7 @@ import java.util.function.Consumer;
 
 public class SimpleParticle extends AbstractParticle {
 
-    public static final ResourceLocation LOCATION = ResourceLocation.withDefaultNamespace("simple");
+    public static final Identifier LOCATION = Identifier.withDefaultNamespace("simple");
     public static final MapCodec<SimpleParticle> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         Codec.INT.optionalFieldOf("count", 1).forGetter(SimpleParticle::count),
         Vec3.CODEC.fieldOf("pos").forGetter(SimpleParticle::pos),

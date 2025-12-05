@@ -5,12 +5,12 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import me.drex.magic_particles.codec.CustomCodecs;
 import me.drex.magic_particles.particles.ParticleManager;
-import net.minecraft.Util;
+import net.minecraft.util.Util;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.network.protocol.game.ClientboundLevelParticlesPacket;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 //? if >= 1.21.2 {
 import net.minecraft.util.ARGB;
 //?}
@@ -24,7 +24,9 @@ import org.joml.Vector3f;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.List;
+//? if < 1.21.5 {
+//import java.util.List;
+//? }
 import java.util.function.Consumer;
 
 public class ImageParticle extends AbstractParticle {
@@ -35,7 +37,7 @@ public class ImageParticle extends AbstractParticle {
                 .comapFlatMap(list -> Util.fixedSize(list, 2).map(listx -> new Vec2(listx.getFirst(), listx.get(1))), vec2 -> List.of(vec2.x, vec2.y));
     *///?}
 
-    public static final ResourceLocation LOCATION = ResourceLocation.withDefaultNamespace("image");
+    public static final Identifier LOCATION = Identifier.withDefaultNamespace("image");
     public static final MapCodec<ImageParticle> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         Codec.STRING.fieldOf("image").forGetter(ImageParticle::image),
         Codec.FLOAT.fieldOf("size_x").forGetter(ImageParticle::sizeX),

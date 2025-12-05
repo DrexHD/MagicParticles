@@ -5,7 +5,7 @@ import me.drex.magic_particles.particles.particle.AbstractParticle;
 import me.drex.magic_particles.particles.particle.BezierParticle;
 import me.drex.magic_particles.particles.particle.ImageParticle;
 import me.drex.magic_particles.particles.particle.SimpleParticle;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.util.Map;
 import java.util.stream.Stream;
@@ -14,7 +14,7 @@ public class ParticleCodec extends MapCodec<AbstractParticle> {
 
     public static final Codec<AbstractParticle> CODEC = new MapCodec.MapCodecCodec<>(new ParticleCodec());
 
-    private static final Map<ResourceLocation, MapCodec<? extends AbstractParticle>> CODECS = Map.of(
+    private static final Map<Identifier, MapCodec<? extends AbstractParticle>> CODECS = Map.of(
         SimpleParticle.LOCATION, SimpleParticle.CODEC,
         BezierParticle.LOCATION, BezierParticle.CODEC,
         ImageParticle.LOCATION, ImageParticle.CODEC
@@ -28,7 +28,7 @@ public class ParticleCodec extends MapCodec<AbstractParticle> {
     public <T> DataResult<AbstractParticle> decode(DynamicOps<T> ops, MapLike<T> input) {
         var value = ops.getStringValue(input.get("type"));
         return value.flatMap(type -> {
-            var id = ResourceLocation.tryParse(type);
+            var id = Identifier.tryParse(type);
 
             //noinspection unchecked
             var codec = (MapCodec<AbstractParticle>) CODECS.get(id);
@@ -36,7 +36,7 @@ public class ParticleCodec extends MapCodec<AbstractParticle> {
             if (codec != null) {
                 return codec.decode(ops, input);
             } else {
-                String candidates = String.join(" ", CODECS.keySet().stream().map(ResourceLocation::toString).toList());
+                String candidates = String.join(" ", CODECS.keySet().stream().map(Identifier::toString).toList());
                 return DataResult.error(() -> "Invalid particle type \"" + type + "\", valid types: " + candidates + "!");
             }
         });
@@ -44,7 +44,7 @@ public class ParticleCodec extends MapCodec<AbstractParticle> {
 
     @Override
     public <T> RecordBuilder<T> encode(AbstractParticle input, DynamicOps<T> ops, RecordBuilder<T> prefix) {
-        var type = input.location().getNamespace().equals(ResourceLocation.DEFAULT_NAMESPACE) ? input.location().getPath() : input.location().toString();
+        var type = input.location().getNamespace().equals(Identifier.DEFAULT_NAMESPACE) ? input.location().getPath() : input.location().toString();
         return input.codec().encode(input, ops, prefix.add("type", ops.createString(type)));
     }
 

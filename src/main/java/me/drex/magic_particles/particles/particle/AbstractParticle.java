@@ -5,7 +5,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.network.protocol.game.ClientboundLevelParticlesPacket;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Display;
 import net.minecraft.world.phys.Vec2;
@@ -17,13 +17,13 @@ import java.util.function.Consumer;
 
 public abstract class AbstractParticle {
 
-    private final ResourceLocation location;
+    private final Identifier location;
     private final MapCodec<AbstractParticle> codec;
     private final EntityAnchorArgument.Anchor anchor;
     private final Vec3 origin;
     private final Display.BillboardConstraints billboard;
 
-    protected AbstractParticle(ResourceLocation location, MapCodec<? extends AbstractParticle> codec, EntityAnchorArgument.Anchor anchor, Vec3 origin, Display.BillboardConstraints billboard) {
+    protected AbstractParticle(Identifier location, MapCodec<? extends AbstractParticle> codec, EntityAnchorArgument.Anchor anchor, Vec3 origin, Display.BillboardConstraints billboard) {
         this.location = location;
         //noinspection unchecked
         this.codec = (MapCodec<AbstractParticle>) codec;
@@ -32,7 +32,7 @@ public abstract class AbstractParticle {
         this.billboard = billboard;
     }
 
-    public ResourceLocation location() {
+    public Identifier location() {
         return this.location;
     }
 

@@ -9,7 +9,7 @@ import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.game.ClientboundLevelParticlesPacket;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Display;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
@@ -19,7 +19,7 @@ import java.util.function.Consumer;
 
 public class BezierParticle extends AbstractParticle {
 
-    public static final ResourceLocation LOCATION = ResourceLocation.withDefaultNamespace("bezier");
+    public static final Identifier LOCATION = Identifier.withDefaultNamespace("bezier");
     public static final MapCodec<BezierParticle> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         Codec.list(Codec.list(Vec3.CODEC)).fieldOf("curves").forGetter(BezierParticle::curves),
         Codec.INT.fieldOf("steps").forGetter(BezierParticle::steps),
