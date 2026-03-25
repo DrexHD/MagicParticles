@@ -2,7 +2,7 @@ import org.jetbrains.changelog.Changelog
 import org.jetbrains.changelog.ChangelogPluginExtension
 
 plugins {
-    id("net.fabricmc.fabric-loom") version "1.15-SNAPSHOT"
+    id("net.fabricmc.fabric-loom-remap") version "1.15-SNAPSHOT"
     id("maven-publish")
     id("me.modmuss50.mod-publish-plugin") version "1.1.0"
     id("org.jetbrains.changelog")
@@ -33,14 +33,15 @@ loom {
 }
 
 fun DependencyHandlerScope.includeMod(dep: String) {
-    include(implementation(dep)!!)
+    include(modImplementation(dep)!!)
 }
 
 dependencies {
     minecraft("com.mojang:minecraft:${findProperty("minecraft_version")}")
-    implementation("net.fabricmc:fabric-loader:${findProperty("loader_version")}")
+    mappings(loom.officialMojangMappings())
+    modImplementation("net.fabricmc:fabric-loader:${findProperty("loader_version")}")
 
-    implementation("net.fabricmc.fabric-api:fabric-api:${findProperty("fabric_version")}")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:${findProperty("fabric_version")}")
 
     // Mod dependencies
     includeMod("me.lucko:fabric-permissions-api:${findProperty("permission_api_version")}")
@@ -48,13 +49,13 @@ dependencies {
     includeMod("maven.modrinth:message-api:${findProperty("message_api_version")}")
     includeMod("eu.pb4:placeholder-api:${findProperty("placeholder_api_version")}")
 
-    compileOnly("maven.modrinth:vanish:${findProperty("vanish_version")}") {
+    modCompileOnly("maven.modrinth:vanish:${findProperty("vanish_version")}") {
         exclude(group = "net.fabricmc.fabric-api")
     }
 }
 
 publishMods {
-    file.set(tasks.jar.get().archiveFile)
+    file.set(tasks.remapJar.get().archiveFile)
     type.set(STABLE)
     changelog.set(fetchChangelog())
 
