@@ -21,5 +21,8 @@
   ],
   "depends": {
     "java": ">=17"
+  },
+  "suggests": {
+    "remove-dialog-warning": "*"
   }
 }

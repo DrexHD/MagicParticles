@@ -72,6 +72,7 @@ publishMods {
         accessToken = providers.environmentVariable("MODRINTH_TOKEN")
         projectId = "3L8uJgqy"
         minecraftVersions.addAll(findProperty("modrinth_minecraft_versions")!!.toString().split(", "))
+        optional("remove-dialog-warning")
     }
     github {
         accessToken = providers.environmentVariable("GITHUB_TOKEN")
