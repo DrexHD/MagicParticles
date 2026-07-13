@@ -4,7 +4,7 @@ import org.jetbrains.changelog.ChangelogPluginExtension
 plugins {
     id("net.fabricmc.fabric-loom-remap") version "1.17-SNAPSHOT"
     id("maven-publish")
-    id("me.modmuss50.mod-publish-plugin") version "1.1.0"
+    id("me.modmuss50.mod-publish-plugin") version "2.1.1"
     id("org.jetbrains.changelog")
 }
 
@@ -46,8 +46,8 @@ dependencies {
     // Mod dependencies
     includeMod("me.lucko:fabric-permissions-api:${findProperty("permission_api_version")}")
     includeMod("eu.pb4:player-data-api:${findProperty("player_data_api_version")}")
-    includeMod("maven.modrinth:message-api:${findProperty("message_api_version")}")
     includeMod("eu.pb4:placeholder-api:${findProperty("placeholder_api_version")}")
+    includeMod("xyz.nucleoid:server-translations-api:${findProperty("server_translations_api_version")}")
 
     modCompileOnly("maven.modrinth:vanish:${findProperty("vanish_version")}") {
         exclude(group = "net.fabricmc.fabric-api")
@@ -68,6 +68,8 @@ publishMods {
         accessToken = providers.environmentVariable("CURSEFORGE_TOKEN")
         projectId = "1039141"
         minecraftVersions.addAll(findProperty("curseforge_minecraft_versions")!!.toString().split(", "))
+        client.set(true)
+        server.set(true)
     }
     modrinth {
         accessToken = providers.environmentVariable("MODRINTH_TOKEN")

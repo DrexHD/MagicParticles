@@ -1,5 +1,3 @@
-import org.gradle.kotlin.dsl.replace
-
 plugins {
     id("dev.kikugie.stonecutter")
     id("org.jetbrains.changelog") version "2.2.0"
