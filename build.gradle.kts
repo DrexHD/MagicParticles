@@ -4,7 +4,7 @@ import org.jetbrains.changelog.ChangelogPluginExtension
 plugins {
     id("net.fabricmc.fabric-loom") version "1.15-SNAPSHOT"
     id("maven-publish")
-    id("me.modmuss50.mod-publish-plugin") version "2.1.1"
+    id("me.modmuss50.mod-publish-plugin") version "2.2.0"
     id("org.jetbrains.changelog")
 }
 
